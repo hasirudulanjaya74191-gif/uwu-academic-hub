@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Census & Student Success Hub | UWU</title>
+    
+    <!-- Adorable & Professional Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js for Insights -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --navy: #002147;
+            --gold: #D4AF37;
+            --bg-gray: #F8FAFC;
+            --white: #FFFFFF;
+            --text-main: #1E293B;
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-gray);
+            background-image: url("https://www.transparenttextures.com/patterns/cubes.png");
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 { font-family: 'Playfair Display', serif; }
+
+        /* --- HEADER & NAVIGATION --- */
+        header {
+            background: linear-gradient(rgba(0, 33, 71, 0.9), rgba(0, 33, 71, 0.9)), 
+                        url('https://images.unsplash.com/photo-1541339907198-e08756ebafe3?auto=format&fit=crop&w=1350&q=80');
+            height: 320px;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            border-bottom: 8px solid var(--gold);
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0% 100%);
+            text-align: center;
+        }
+
+        .main-nav {
+            display: flex; gap: 10px; margin-top: -35px; justify-content: center; position: relative; z-index: 100;
+        }
+
+        .nav-tab {
+            background: var(--white); padding: 12px 25px; border-radius: 50px;
+            font-weight: 700; color: var(--navy); cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1); transition: var(--transition); border: none;
+        }
+
+        .nav-tab.active { background: var(--gold); transform: translateY(-5px); border: 2px solid var(--navy); }
+
+        .container { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
+        .page-section { display: none; }
+        .page-section.active { display: block; animation: fadeIn 0.6s ease; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- CARDS & FORMS --- */
+        .glass-card { background: var(--white); padding: 45px; border-radius: 30px; box-shadow: 0 40px 100px -20px rgba(0, 33, 71, 0.1); }
+        .input-group { margin-bottom: 25px; }
+        label { display: block; font-weight: 700; color: var(--navy); margin-bottom: 10px; font-size: 0.95rem; }
+        input, select, textarea { width: 100%; padding: 15px; border: 2px solid #E2E8F0; border-radius: 15px; background: #F8FAFC; font-family: inherit; font-size: 1rem; }
+        input:focus { border-color: var(--gold); outline: none; background: #fff; }
+
+        .btn-action { background: var(--gold); color: var(--navy); border: none; padding: 18px 40px; border-radius: 15px; font-weight: 800; cursor: pointer; transition: 0.3s; }
+        .btn-action:hover { background: var(--navy); color: var(--gold); transform: translateY(-3px); }
+
+        .sat-btn { background: #F8FAFC; border: 2px solid #EDF2F7; padding: 15px; border-radius: 15px; text-align: center; cursor: pointer; transition: 0.3s; font-weight: 600; }
+        .sat-btn.selected { background: var(--navy); color: var(--gold); border-color: var(--navy); }
+
+        /* --- INSIGHTS SUB-NAV --- */
+        .insights-nav { display: flex; justify-content: center; gap: 10px; margin-bottom: 40px; flex-wrap: wrap; }
+        .sub-tab { background: #EDF2F7; padding: 12px 22px; border-radius: 12px; font-weight: 700; cursor: pointer; border: none; transition: 0.3s; }
+        .sub-tab.active { background: var(--navy); color: var(--gold); }
+
+        /* --- ADVANCED NAVIGATOR OUTPUT --- */
+        .pathway-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
+        .degree-item { background: #fff; border: 1px solid #EDF2F7; padding: 25px; border-radius: 20px; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; }
+        .degree-item:hover { border-color: var(--gold); transform: translateX(5px); }
+        .tag { font-size: 0.7rem; padding: 5px 12px; border-radius: 50px; font-weight: 800; text-transform: uppercase; display: inline-block; margin-bottom: 8px; }
+        .tag-gov { background: #E0F2FE; color: #0369A1; }
+        .tag-pri { background: #FEF3C7; color: #92400E; }
+        .prob-high { color: #059669; font-weight: 700; } .prob-mid { color: #D97706; font-weight: 700; } .prob-low { color: #DC2626; font-weight: 700; }
+
+        @media (max-width: 600px) { header h1 { font-size: 1.8rem; } .nav-tab { padding: 10px 15px; font-size: 0.8rem; } }
+    </style>
+</head>
+<body>
+
+    <header>
+
+        <img src="https://drive.google.com/file/d/17E19euhMt0f6b8jpZz6ySvYxuNlAujBy/view?usp=drive_link" alt="UWU" style="width: 60px; margin-bottom: 10px;">
+        <h1 style="font-family: 'Playfair Display';">Academic Hub & Success Insights</h1>
+        <p>Faculty of Technology | Uva Wellassa University</p>
+    </header>
+
+    <nav class="main-nav">
+        <button class="nav-tab active" onclick="switchMainTab('form-section', this)">📋 Census Form</button>
+        <button class="nav-tab" onclick="switchMainTab('insights-section', this)">📊 Data Insights</button>
+    </nav>
+
+    <div class="container">
+        
+        <!-- SECTION 1: CENSUS FORM (SYNCED TO SHEETMONKEY) -->
+        <section id="form-section" class="page-section active">
+            <div class="glass-card">
+                <form id="censusForm" action="https://api.sheetmonkey.io/form/fkHJQ1zsbAhvPZu6uZRffE" method="POST">
+                    <input type="hidden" name="Created" value="x-sheetmonkey-current-date-time" />
+                    
+                    <!-- Form Step 0: Identity -->
+                    <div class="form-step active" id="step-0">
+                        <h3 style="margin-bottom:25px; color:var(--navy);">Step 1: Identity Profile</h3>
+                        <div class="input-group"><label>Full Name with Initials</label><input type="text" name="Student Name" required></div>
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+                            <div class="input-group"><label>Age</label><input type="number" name="Age"></div>
+                            <div class="input-group">
+                                <label>Gender</label>
+                                <select name="Gender"><option>Male</option><option>Female</option></select>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-action" onclick="formNav(1)">Next Step →</button>
+                    </div>
+
+                    <!-- Form Step 1: A/L Profile -->
+                    <div class="form-step" style="display:none;" id="step-1">
+                        <h3 style="margin-bottom:25px; color:var(--navy);">Step 2: G.C.E. A/L Profile</h3>
+                        <div class="input-group">
+                            <label>A/L Subject Stream</label>
+                            <select id="censusStream" name="AL Stream" onchange="handleCensusStream()" required>
+                                <option value="" disabled selected>Select Stream</option>
+                                <option>Biological Science</option>
+                                <option>Physical Science</option>
+                                <option>Commerce</option>
+                                <option>Technology</option>
+                                <option>Arts</option>
+                            </select>
+                        </div>
+                        <div id="census-combo-wrap" style="display:none;" class="input-group">
+                            <label>Subject Combination</label>
+                            <select id="censusCombo" name="Subject Combination"></select>
+                        </div>
+                        <label>Main Subject Results</label>
+                        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; margin-bottom:20px;">
+                            <select name="Grade 1"><option>A</option><option>B</option><option>C</option><option>S</option><option>F</option></select>
+                            <select name="Grade 2"><option>A</option><option>B</option><option>C</option><option>S</option><option>F</option></select>
+                            <select name="Grade 3"><option>A</option><option>B</option><option>C</option><option>S</option><option>F</option></select>
+                        </div>
+                        <div style="display:flex; gap:10px;">
+                            <button type="button" class="btn-action" style="background:#eee; color:#333;" onclick="formNav(0)">Back</button>
+                            <button type="button" class="btn-action" onclick="formNav(2)">Next Step →</button>
+                        </div>
+                    </div>
+
+                    <!-- Form Step 2: Academic Profile -->
+                    <div class="form-step" style="display:none;" id="step-2">
+                        <h3 style="margin-bottom:25px; color:var(--navy);">Step 3: University Academic Profile</h3>
+                        <div class="input-group"><label>Degree Programme Name</label><input type="text" name="Degree" required></div>
+                        <div class="input-group"><label>Faculty Name</label><input type="text" name="Faculty" required></div>
+                        <div class="input-group">
+                            <label>University Sector</label>
+                            <select name="UniType"><option>Government</option><option>Private</option></select>
+                        </div>
+                        <div style="display:flex; gap:10px;">
+                            <button type="button" class="btn-action" style="background:#eee; color:#333;" onclick="formNav(1)">Back</button>
+                            <button type="button" class="btn-action" onclick="formNav(3)">Next Step →</button>
+                        </div>
+                    </div>
+
+                    <!-- Form Step 3: Feedback -->
+                    <div class="form-step" style="display:none;" id="step-3">
+                        <h3 style="margin-bottom:25px; color:var(--navy);">Step 4: Satisfaction Feedback</h3>
+                        <label>Satisfaction Level</label>
+                        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap:10px; margin-bottom:20px;">
+                            <div class="sat-btn" onclick="selectCensusSat('Very satisfied', this)">😍 Very satisfied</div>
+                            <div class="sat-btn" onclick="selectCensusSat('Satisfied', this)">😊 Satisfied</div>
+                            <div class="sat-btn" onclick="selectCensusSat('Neutral', this)">😐 Neutral</div>
+                            <div class="sat-btn" onclick="selectCensusSat('Dissatisfied', this)">🙁 Dissatisfied</div>
+                        </div>
+                        <input type="hidden" name="Satisfaction" id="censusSatInput" required>
+                        
+                        <div id="censusDissBox" style="display:none; margin-bottom:20px;">
+                            <label>Please share your feedback (Why dissatisfied?)</label>
+                            <textarea name="DissReason" rows="3" placeholder="State your concerns..."></textarea>
+                        </div>
+
+                        <div class="input-group"><label>Primary Career Goal</label><input type="text" name="Career"></div>
+                        
+                        <div style="display:flex; gap:10px;">
+                            <button type="button" class="btn-action" style="background:#eee; color:#333;" onclick="formNav(2)">Back</button>
+                            <button type="submit" id="submitBtn" class="btn-action">Sync Data to Cloud</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- SECTION 2: INSIGHTS & ADVANCED NAVIGATOR -->
+        <section id="insights-section" class="page-section">
+            <div class="insights-nav">
+                <button class="sub-tab active" onclick="switchSubTab('dash-page', this)">📊 Dashboard</button>
+                <button class="sub-tab" onclick="switchSubTab('nav-page', this)">🎯 Advanced Navigator</button>
+                <button class="sub-tab" onclick="switchSubTab('rank-page', this)">🏆 Satisfaction Index</button>
+                <button class="sub-tab" onclick="switchSubTab('hub-page', this)">💬 Student Hub</button>
+            </div>
+
+            <!-- Dashboard -->
+            <div id="dash-page" class="sub-page">
+                <div class="glass-card">
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap:25px;">
+                        <div style="background:white; padding:20px; border-radius:20px; border:1px solid #edf2f7;">
+                            <h3 style="margin-bottom:15px; font-size:1rem;">Satisfaction: Gov vs Private</h3><canvas id="satChart"></canvas>
+                        </div>
+                        <div style="background:white; padding:20px; border-radius:20px; border:1px solid #edf2f7;">
+                            <h3 style="margin-bottom:15px; font-size:1rem;">Subject Stream Choices</h3><canvas id="streamChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ADVANCED NAVIGATOR (FULL DISTRICT ENGINE) -->
+            <div id="nav-page" class="sub-page" style="display:none;">
+                <div class="glass-card">
+                    <h2 style="margin-bottom:10px; color:var(--navy);">🎯 Full District Navigator</h2>
+                    <p style="margin-bottom:30px; font-size:0.9rem; color:#64748b;">Simulating UGC Z-Score Quotas across all 25 Districts.</p>
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:20px; margin-bottom:30px;">
+                        <div>
+                            <label>District</label>
+                            <select id="recDist">
+                                <optgroup label="Common (High Competition)">
+                                    <option value="1.2">Colombo</option><option value="1.2">Gampaha</option><option value="1.1">Kandy</option><option value="1.1">Galle</option><option value="1.1">Matara</option>
+                                </optgroup>
+                                <optgroup label="Medium">
+                                    <option value="1.0">Kurunegala</option><option value="1.0">Badulla</option><option value="1.0">Jaffna</option><option value="1.0">Ratnapura</option>
+                                </optgroup>
+                                <optgroup label="Disadvantaged">
+                                    <option value="0.8">Monaragala</option><option value="0.8">Ampara</option><option value="0.8">Nuwara Eliya</option><option value="0.8">Kilinochchi</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                        <div>
+                            <label>A/L Stream</label>
+                            <select id="recStream"><option>Physical Science</option><option>Biological Science</option><option>Technology</option><option>Commerce</option><option>Arts</option></select>
+                        </div>
+                        <div>
+                            <label>Grades (Sum)</label>
+                            <div style="display:flex; gap:5px;">
+                                <select id="rg1"><option value="4">A</option><option value="3">B</option><option value="2">C</option><option value="1">S</option></select>
+                                <select id="rg2"><option value="4">A</option><option value="3">B</option><option value="2">C</option><option value="1">S</option></select>
+                                <select id="rg3"><option value="4">A</option><option value="3">B</option><option value="2">C</option><option value="1">S</option></select>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn-action" style="width:100%;" onclick="runAdvancedNavigator()">Analyze My Future Paths</button>
+                    <div id="nav-results" style="display:none; margin-top:40px;">
+                        <h3 style="border-left:5px solid var(--gold); padding-left:15px; margin-bottom:20px;">State University Pathways</h3><div id="gov-res" class="pathway-grid"></div>
+                        <h3 style="border-left:5px solid var(--gold); padding-left:15px; margin:40px 0 20px;">Private Pathways</h3><div id="pri-res" class="pathway-grid"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RANKINGS -->
+            <div id="rank-page" class="sub-page" style="display:none;">
+                <div class="glass-card" style="overflow-x:auto;">
+                    <table style="width:100%; border-collapse:collapse; min-width:600px;">
+                        <thead style="background:var(--navy); color:var(--gold);"><tr><th style="padding:15px; text-align:left;">Programme</th><th>University</th><th>Satisfaction Index</th></tr></thead>
+                        <tbody id="rankBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- HUB -->
+            <div id="hub-page" class="sub-page" style="display:none;">
+                <div id="testiBody" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:20px;"></div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // --- CENSUS DATASET ---
+        const censusData = [
+            { name: "B.Engineering Tech", uni: "UWU (Gov)", stream: "Technology", sat: 96, advice: "Focus on practicals. Industry values BET skills high." },
+            { name: "BSc. Computer Science", uni: "IIT (Private)", stream: "Physical Science", sat: 93, advice: "Private entry is faster. Start coding from year one." },
+            { name: "B.Biosystems Tech", uni: "UWU (Gov)", stream: "Technology", sat: 89, advice: "Agri-tech is the future of Sri Lanka. Join UWU." }
+        ];
+
+        const navigatorDB = {
+            "Physical Science": {
+                gov: [{ n: "Engineering (BSc Hons)", u: "Moratuwa/Pera", t: 11, s: 98 }, { n: "Computer Science", u: "UCSC/J'pura", t: 9.5, s: 95 }],
+                pri: [{ n: "Software Engineering", u: "SLIIT/IIT", s: 96 }]
+            },
+            "Technology": {
+                gov: [{ n: "Engineering Tech (BET)", u: "UWU/J'pura", t: 8.5, s: 96 }, { n: "Biosystems Tech (BST)", u: "UWU/Kurunegala", t: 7.5, s: 91 }],
+                pri: [{ n: "Mechatronics", u: "CINEC/Horizon", s: 92 }]
+            },
+            "Biological Science": {
+                gov: [{ n: "Medicine (MBBS)", u: "Colombo/Ragama", t: 11.5, s: 99 }, { n: "Food Science", u: "UWU/J'pura", t: 8, s: 89 }],
+                pri: [{ n: "Nursing / KIU", u: "IIHS/KIU", s: 87 }]
+            },
+            "Commerce": {
+                gov: [{ n: "Accounting/Finance", u: "J'pura/Colombo", t: 10, s: 94 }],
+                pri: [{ n: "Professional CIMA", u: "Achievers", s: 97 }]
+            },
+            "Arts": {
+                gov: [{ n: "Law (LLB)", u: "Colombo", t: 11, s: 96 }],
+                pri: [{ n: "Digital Design", u: "AMDT/NSBM", s: 95 }]
+            }
+        };
+
+        const combinations = {
+            "Biological Science": ["Bio + Chemistry + Physics", "Bio + Chemistry + Agri"],
+            "Physical Science": ["Maths + Physics + Chemistry", "Maths + Physics + ICT"],
+            "Commerce": ["Accounting + Business + Economics"],
+            "Technology": ["Engineering Tech + SFT + ICT", "Bio-Systems Tech + SFT + Agri"]
+        };
+
+        // --- CENSUS FORM LOGIC ---
+        function handleCensusStream() {
+            const stream = document.getElementById("censusStream").value;
+            const wrap = document.getElementById("census-combo-wrap");
+            const sel = document.getElementById("censusCombo");
+            sel.innerHTML = "";
+            if (stream === "Arts" || !combinations[stream]) {
+                wrap.style.display = "none";
+            } else {
+                wrap.style.display = "block";
+                combinations[stream].forEach(c => {
+                    const opt = document.createElement("option"); opt.value = c; opt.textContent = c; sel.appendChild(opt);
+                });
+            }
+        }
+
+        function selectCensusSat(val, el) {
+            document.querySelectorAll('.sat-btn').forEach(b => b.classList.remove('selected'));
+            el.classList.add('selected');
+            document.getElementById('censusSatInput').value = val;
+            document.getElementById('censusDissBox').style.display = (val === 'Dissatisfied') ? 'block' : 'none';
+        }
+
+        function formNav(n) {
+            document.querySelectorAll('.step').forEach(s => s.style.display = 'none');
+            document.getElementById('step-' + n).style.display = 'block';
+            window.scrollTo({ top: 200, behavior: 'smooth' });
+        }
+
+        // --- NAVIGATION & INSIGHTS ---
+        function switchMainTab(id, el) {
+            document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(id).classList.add('active'); el.classList.add('active');
+            if(id === 'insights-section') initVisuals();
+        }
+
+        function switchSubTab(id, el) {
+            document.querySelectorAll('.sub-page').forEach(p => p.style.display = 'none');
+            document.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(id).style.display = 'block'; el.classList.add('active');
+        }
+
+        function runAdvancedNavigator() {
+            const stream = document.getElementById('recStream').value;
+            const dist = parseFloat(document.getElementById('recDist').value);
+            const score = parseInt(document.getElementById('rg1').value) + parseInt(document.getElementById('rg2').value) + parseInt(document.getElementById('rg3').value);
+            
+            const gRes = document.getElementById('gov-res'); const pRes = document.getElementById('pri-res');
+            gRes.innerHTML = ""; pRes.innerHTML = "";
+
+            const data = navigatorDB[stream];
+            if(!data) return;
+
+            data.gov.forEach(deg => {
+                const adj = deg.t * dist;
+                const prob = score >= adj ? "prob-high" : (score >= adj - 1.5 ? "prob-mid" : "prob-low");
+                const txt = score >= adj ? "Very Likely" : (score >= adj - 1.5 ? "Competitive" : "Unlikely");
+                gRes.innerHTML += `<div class="degree-item"><div><span class="tag tag-gov">State Uni</span><h4>${deg.n}</h4><small>${deg.u}</small><span class="probability ${prob}">${txt}</span></div><div class="sat-score"><span class="sat-val">${deg.s}%</span><span class="sat-lbl">Satisfaction</span></div></div>`;
+            });
+
+            data.pri.forEach(deg => {
+                pRes.innerHTML += `<div class="degree-item"><div><span class="tag tag-pri">Private</span><h4>${deg.n}</h4><small>${deg.u}</small><span class="probability prob-high">Entry Guaranteed</span></div><div class="sat-score"><span class="sat-val">${deg.s}%</span><span class="sat-lbl">Satisfaction</span></div></div>`;
+            });
+
+            document.getElementById('nav-results').style.display = 'block';
+        }
+
+        function initVisuals() {
+            new Chart(document.getElementById('satChart'), { type: 'bar', data: { labels: ['Gov Sector', 'Private Sector'], datasets: [{ data: [86, 92], backgroundColor: ['#002147', '#D4AF37'] }] } });
+            new Chart(document.getElementById('streamChart'), { type: 'doughnut', data: { labels: ['Tech', 'Maths', 'Bio', 'Commerce'], datasets: [{ data: [50, 20, 20, 10], backgroundColor: ['#002147', '#D4AF37', '#6366f1', '#10B981'] }] } });
+
+            const rb = document.getElementById('rankBody'); const tb = document.getElementById('testiBody');
+            rb.innerHTML = ""; tb.innerHTML = "";
+            censusData.forEach(d => {
+                rb.innerHTML += `<tr style="border-bottom:1px solid #eee;"><td style="padding:15px;">${d.name}</td><td>${d.uni}</td><td>${d.sat}% Satisfied</td></tr>`;
+                tb.innerHTML += `<div style="background:white; padding:25px; border-radius:20px; border:1px solid #edf2f7;"><h3>${d.name}</h3><p style="font-style:italic; color:#475569;">"${d.advice}"</p></div>`;
+            });
+        }
+
+        // --- AJAX SYNC TO SHEETMONKEY ---
+        const form = document.getElementById("censusForm");
+        const btn = document.getElementById("submitBtn");
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            btn.disabled = true; btn.innerText = "Syncing Data...";
+            
+            try {
+                const response = await fetch(form.action, { method: "POST", body: new FormData(form) });
+                if (response.ok) {
+                    btn.innerText = "Successfully Synced ✅"; btn.style.background = "#059669";
+                    alert("Success! Your census data has been synced to the Master Spreadsheet.");
+                    setTimeout(() => window.location.reload(), 3000);
+                } else throw new Error();
+            } catch {
+                btn.disabled = false; btn.innerText = "Retry Sync"; btn.style.background = "#DC2626";
+                alert("Sync failed. Please check internet connection.");
+            }
+        });
+    </script>
+</body>
+</html>
