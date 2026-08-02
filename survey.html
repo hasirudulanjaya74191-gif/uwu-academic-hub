@@ -141,42 +141,80 @@ html
                 </div>
             </section>
 
-            <!-- Section 3: Higher Education -->
-            <section class="form-card">
-                <h2 class="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
-                    <span class="bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">3</span>
-                    Higher Education & Career
-                </h2>
+           <!-- Section 3: Higher Education & Career -->
+<section class="form-card">
+    <h2 class="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
+        <span class="bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">3</span>
+        Higher Education & Career
+    </h2>
 
-                <div class="space-y-6">
-                    <div>
-                        <label class="label-style">Current University / Institution</label>
-                        <select name="university" required class="input-field">
-                            <option value="">Select Institution</option>
-                            <optgroup label="Government Universities">
-                                <option>University of Colombo</option>
-                                <option>University of Peradeniya</option>
-                                <option>University of Moratuwa</option>
-                                <option>University of Sri Jayewardenepura</option>
-                                <option>University of Kelaniya</option>
-                                <option>University of Ruhuna</option>
-                                <option>Open University of Sri Lanka</option>
-                            </optgroup>
-                            <optgroup label="Private Universities / Institutes">
-                                <option>SLIIT</option>
-                                <option>NSBM Green University</option>
-                                <option>IIT</option>
-                                <option>APIIT</option>
-                                <option>CINEC Campus</option>
-                                <option>Horizon Campus</option>
-                            </optgroup>
-                        </select>
-                    </div>
+    <div class="space-y-6">
+        <!-- University Selection -->
+        <div>
+            <label class="label-style">Current University / Institution</label>
+            <select name="university" required class="input-field">
+                <option value="">-- Select Your Institution --</option>
+                
+                <optgroup label="Government Universities (UGC)">
+                    <option value="Eastern University, Sri Lanka">Eastern University, Sri Lanka</option>
+                    <option value="Gampaha Wickramarachchi University">Gampaha Wickramarachchi University of Indigenous Medicine</option>
+                    <option value="Open University of Sri Lanka">Open University of Sri Lanka (OUSL)</option>
+                    <option value="Ocean University of Sri Lanka">Ocean University of Sri Lanka (OCU)</option>
+                    <option value="Rajarata University of Sri Lanka">Rajarata University of Sri Lanka</option>
+                    <option value="Sabaragamuwa University of Sri Lanka">Sabaragamuwa University of Sri Lanka</option>
+                    <option value="South Eastern University of Sri Lanka">South Eastern University of Sri Lanka</option>
+                    <option value="University of Colombo">University of Colombo</option>
+                    <option value="University of Jaffna">University of Jaffna</option>
+                    <option value="University of Kelaniya">University of Kelaniya</option>
+                    <option value="University of Moratuwa">University of Moratuwa</option>
+                    <option value="University of Peradeniya">University of Peradeniya</option>
+                    <option value="University of Ruhuna">University of Ruhuna</option>
+                    <option value="University of Sri Jayewardenepura">University of Sri Jayewardenepura</option>
+                    <option value="University of Vavuniya">University of Vavuniya</option>
+                    <option value="University of the Visual & Performing Arts">University of the Visual & Performing Arts</option>
+                    <option value="Uva Wellassa University">Uva Wellassa University</option>
+                    <option value="Wayamba University of Sri Lanka">Wayamba University of Sri Lanka</option>
+                    <option value="General Sir John Kotelawala Defence University">General Sir John Kotelawala Defence University (KDU)</option>
+                </optgroup>
 
-                    <div>
-                        <label class="label-style">Exact Degree Program Name</label>
-                        <input type="text" name="degree_program" required placeholder="e.g. BSc (Hons) in Software Engineering" class="input-field">
-                    </div>
+                <optgroup label="Private Universities / Degree-Awarding Institutes">
+                    <option value="ANC Education">ANC Education</option>
+                    <option value="APIIT">APIIT (Asia Pacific Institute of Information Technology)</option>
+                    <option value="Aquinas College">Aquinas College of Higher Studies</option>
+                    <option value="BMS">BMS (Business Management School)</option>
+                    <option value="CINEC Campus">CINEC Campus</option>
+                    <option value="ESOFT Metro Campus">ESOFT Metro Campus</option>
+                    <option value="Gateway Graduate School">Gateway Graduate School</option>
+                    <option value="Horizon Campus">Horizon Campus</option>
+                    <option value="ICBT Campus">ICBT Campus</option>
+                    <option value="IIT">IIT (Informatics Institute of Technology)</option>
+                    <option value="KIU">KIU (Kaatsu International University)</option>
+                    <option value="NIBM">NIBM (National Institute of Business Management)</option>
+                    <option value="NSBM Green University">NSBM Green University</option>
+                    <option value="RIC">RIC (Royal Institute of Colombo)</option>
+                    <option value="Saegis Campus">Saegis Campus</option>
+                    <option value="SANASA Campus">SANASA Campus</option>
+                    <option value="SLIIT">SLIIT (Sri Lanka Institute of Information Technology)</option>
+                    <option value="SLTC Research University">SLTC Research University</option>
+                </optgroup>
+                
+                <option value="Other">Other / Professional Body (e.g. CA, CIMA, ACCA)</option>
+            </select>
+        </div>
+
+        <!-- Degree Program Name -->
+        <div>
+            <label class="label-style">Exact Degree Program Name</label>
+            <input type="text" name="degree_program" required placeholder="e.g. BSc (Hons) in Software Engineering" class="input-field">
+        </div>
+
+        <!-- Career Aspiration -->
+        <div>
+            <label class="label-style">Future Career Aspiration</label>
+            <input type="text" name="future_career" required placeholder="e.g. Civil Engineer, Data Scientist, Teacher" class="input-field">
+        </div>
+    </div>
+</section>
 
                     <div>
                         <label class="label-style">Satisfaction Level</label>
